@@ -1,9 +1,6 @@
 const TimeSchedule = require("./../models/TimeSchedule");
 const asyncHandler = require("express-async-handler");
 
-// @desc Get TimeSchedule for each Teacher
-// @route GET /TimeSchedule
-// @access Everyone
 const getTimeSchedule = async (req, res) => {
   if (!req?.params?.teacher_id) {
     return res.status(400).json({ message: "ID Required" });
@@ -19,20 +16,16 @@ const getTimeSchedule = async (req, res) => {
   res.json(timeSchedule);
 };
 
-// @desc Add TimeSchedule
-// @route POST /time_Schedule
-// @access Private
+
 const addTimeSchedule = asyncHandler(async (req, res) => {
   const { teacher, schedule } = req.body;
 
-  // Confirm Data
   if (!teacher || !schedule) {
     return res
       .status(400)
       .json({ message: "Incomplete Request: Fields Missing" });
   }
 
-  // Check for Duplicates
   const duplicate = await TimeSchedule.findOne({
     teacher: teacher,
   })
@@ -48,7 +41,6 @@ const addTimeSchedule = asyncHandler(async (req, res) => {
     schedule,
   };
 
-  // Create and Store New Time Schedule
   const record = await TimeSchedule.create(TimeScheduleObj);
 
   if (record) {
@@ -60,35 +52,21 @@ const addTimeSchedule = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc Update TimeSchedule
-// @route PATCH /TimeSchedule
-// @access Private
 const updateTimeSchedule = asyncHandler(async (req, res) => {
   const { teacher, schedule } = req.body;
 
-  // Confirm Data
+
   if (!teacher || !schedule) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
-  // Find Record
+
   const record = await TimeSchedule.findOne({ teacher: teacher }).exec();
 
   if (!record) {
     return res.status(404).json({ message: "Time Schedule doesn't exist" });
   }
 
-  // // Check for duplicate
-  // const duplicate = await TimeSchedule.findOne({
-  //   teacher_id: req.params.teacher_id,
-  // })
-  //   .lean()
-  //   .exec();
-
-  // // Allow Updates to original
-  // if (duplicate && duplicate?._id.toString() !== id) {
-  //   return res.status(409).json({ message: "Duplicate Time Schedule" });
-  // }
 
   record.schedule = schedule;
 
@@ -100,9 +78,6 @@ const updateTimeSchedule = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc Delete TimeSchedule
-// @route DELETE /time_schedule
-// @access Private
 const deleteTimeSchedule = asyncHandler(async (req, res) => {
   if (!req?.params?.teacher_id) {
     return res.status(400).json({ message: "ID Required" });

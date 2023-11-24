@@ -3,9 +3,6 @@ const Student = require("./../models/Student");
 const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt");
 
-// @desc Auth Login
-// @route POST /auth/login/teacher
-// @access Public
 const teacherLogin = asyncHandler(async (req, res) => {
   const { username, password } = req.body;
 
@@ -33,9 +30,6 @@ const teacherLogin = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc Auth Login
-// @route POST /auth/login/student
-// @access Public
 const studentLogin = asyncHandler(async (req, res) => {
   const { username, password } = req.body;
 
@@ -58,10 +52,5 @@ const studentLogin = asyncHandler(async (req, res) => {
     });
   }
 });
-
-// // @desc Auth Logout
-// // @route POST /auth/logout
-// // @access Public
-// const logout = asyncHandler(async (req, res) => {});
 
 module.exports = { teacherLogin, studentLogin };

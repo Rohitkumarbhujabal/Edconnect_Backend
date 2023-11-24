@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 
-// Schema for a day
 const daySchema = new mongoose.Schema({
   monday: [
     {

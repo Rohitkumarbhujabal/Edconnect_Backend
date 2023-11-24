@@ -2,9 +2,7 @@ const { mongoose } = require("mongoose");
 const Paper = require("./../models/Paper");
 const asyncHandler = require("express-async-handler");
 
-// @desc Get Papers for each Teacher
-// @route GET /Paper/teacher/teacherId
-// @access Everyone
+
 const getPapers = asyncHandler(async (req, res) => {
   if (!req?.params?.teacherId) {
     return res.status(400).json({ message: "Teacher ID Missing" });
@@ -22,9 +20,7 @@ const getPapers = asyncHandler(async (req, res) => {
   res.json(papers);
 });
 
-// @desc Get Papers for each Student
-// @route GET /paper/student/:studentId
-// @access Everyone
+
 const getPapersStudent = asyncHandler(async (req, res) => {
   if (!req?.params?.studentId) {
     return res.status(400).json({ message: "Student ID Missing" });
@@ -64,9 +60,6 @@ const getPapersStudent = asyncHandler(async (req, res) => {
   res.json(papers);
 });
 
-// @desc Get All Papers
-// @route GET /paper/
-// @access Everyone
 const getAllPapers = asyncHandler(async (req, res) => {
   if (!req?.params?.studentId) {
     return res.status(400).json({ message: "Student ID Missing" });
@@ -106,9 +99,7 @@ const getAllPapers = asyncHandler(async (req, res) => {
   res.json(papers);
 });
 
-// @desc Get Students for each paper
-// @route GET /paper/students/:paperId
-// @access Private
+
 const getStudentsList = asyncHandler(async (req, res) => {
   if (!req?.params?.paperId) {
     return res
@@ -126,9 +117,6 @@ const getStudentsList = asyncHandler(async (req, res) => {
   res.json(students.students);
 });
 
-// @desc Get Paper
-// @route GET /Paper
-// @access Everyone
 const getPaper = asyncHandler(async (req, res) => {
   if (!req?.params?.paperId) {
     return res
@@ -149,20 +137,15 @@ const getPaper = asyncHandler(async (req, res) => {
   res.json(paper);
 });
 
-// @desc Add Paper
-// @route POST /Paper
-// @access Private
 const addPaper = asyncHandler(async (req, res) => {
   const { department, semester, year, paper, students, teacher } = req.body;
 
-  // Confirm Data
   if (!department || !paper || !semester || !year || !students || !teacher) {
     return res
       .status(400)
       .json({ message: "Incomplete Request: Fields Missing" });
   }
 
-  // Check for Duplicates
   const duplicate = await Paper.findOne({
     department: req.body.department,
     paper: req.body.paper,
@@ -185,7 +168,6 @@ const addPaper = asyncHandler(async (req, res) => {
     teacher,
   };
 
-  // Create and Store New teacher
   const record = await Paper.create(PaperObj);
 
   if (record) {
@@ -197,18 +179,15 @@ const addPaper = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc Update Paper
-// @route PATCH /Paper
-// @access Private
 const updateStudents = asyncHandler(async (req, res) => {
   const { id, students } = req.body;
 
-  // Confirm Data
+
   if (!id || !students) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
-  // Find Record
+
   const record = await Paper.findById(id).exec();
 
   if (!record) {
@@ -225,9 +204,6 @@ const updateStudents = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc Delete Paper
-// @route DELETE /Paper
-// @access Private
 const deletePaper = asyncHandler(async (req, res) => {
   const { id } = req.body;
 

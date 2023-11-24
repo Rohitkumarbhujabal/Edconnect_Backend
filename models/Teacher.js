@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 
-// Teacher Details
 const teacherSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -28,7 +27,6 @@ const teacherSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    default: "",
   },
 });
 

@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 
-// Attendance of Students
 const attendanceSchema = new mongoose.Schema(
   {
     paper: {

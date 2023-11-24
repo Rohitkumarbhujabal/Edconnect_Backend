@@ -2,9 +2,7 @@ const Teacher = require("./../models/Teacher");
 const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt");
 
-// @desc Get Teacher
-// @route GET /teacher
-// @access Private
+
 const getTeacher = asyncHandler(async (req, res) => {
   if (!req?.params?.id) return res.status(400).json({ message: "ID Missing" });
 
@@ -17,9 +15,7 @@ const getTeacher = asyncHandler(async (req, res) => {
   res.json(teacher);
 });
 
-// @desc Get all Teachers
-// @route GET /Teachers
-// @access Private
+
 const getNewTeachers = asyncHandler(async (req, res) => {
   if (!req?.params?.department)
     return res.status(400).json({ message: "Params Missing" });
@@ -36,9 +32,7 @@ const getNewTeachers = asyncHandler(async (req, res) => {
   res.json(teachers);
 });
 
-// @desc Get Teacher Names only
-// @route GET /TeachersList
-// @access Private
+
 const getTeacherList = asyncHandler(async (req, res) => {
   if (!req?.params?.department)
     return res.status(400).json({ message: "Params Missing" });
@@ -54,14 +48,11 @@ const getTeacherList = asyncHandler(async (req, res) => {
   res.json(teachersList);
 });
 
-// @desc Create New Teacher
-// @route POST /Teacher
-// @access Private
+
 const createNewTeacher = asyncHandler(async (req, res) => {
   const { username, name, email, qualification, department, password, roles } =
     req.body;
 
-  // Confirm Data
   if (
     !username ||
     !name ||
@@ -73,15 +64,13 @@ const createNewTeacher = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "All fields are required" });
   }
 
-  // Check for Duplicates
   const duplicate = await Teacher.findOne({ username }).lean().exec();
 
   if (duplicate) {
     return res.status(409).json({ message: "Duplicate Username" });
   }
 
-  // Hash Password
-  const hashedPwd = await bcrypt.hash(password, 10); // salt rounds
+  const hashedPwd = await bcrypt.hash(password, 10); 
 
   const teacherObj = {
     username,
@@ -93,7 +82,6 @@ const createNewTeacher = asyncHandler(async (req, res) => {
     roles,
   };
 
-  // Create and Store New teacher
   const teacher = await Teacher.create(teacherObj);
 
   if (teacher) {
@@ -103,17 +91,14 @@ const createNewTeacher = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc Update Teacher
-// @route PATCH /Teacher
-// @access Private
+
 const approveTeacher = asyncHandler(async (req, res) => {
   const { id, roles } = req.body;
 
-  // Confirm Data
+
   if ((!id, !roles)) {
     return res.status(400).json({ message: "All fields are required" });
   }
-  // Find Teacher
   const teacher = await Teacher.findById(id).exec();
   if (!teacher) {
     return res.status(400).json({ message: "User not found" });
@@ -121,18 +106,12 @@ const approveTeacher = asyncHandler(async (req, res) => {
 
   teacher.roles = roles;
 
-  // if (password) {
-  //   // Hash Pwd
-  //   teacher.password = await bcrypt.hash(password, 10);
-  // }
+
   await teacher.save();
 
   res.json({ message: "Teacher Approved" });
 });
 
-// @desc Delete Teacher
-// @route DELETE /Teacher
-// @access Private
 const deleteTeacher = asyncHandler(async (req, res) => {
   const id = req.params.id;
 

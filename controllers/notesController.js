@@ -1,9 +1,7 @@
 const Notes = require("./../models/Notes");
 const asyncHandler = require("express-async-handler");
 
-// @desc Get Notes for each Paper
-// @route GET /Notes/:paper
-// @access Everyone
+
 const getNotes = async (req, res) => {
   if (!req?.params?.paperId) {
     return res
@@ -21,9 +19,6 @@ const getNotes = async (req, res) => {
   res.json(notes);
 };
 
-// @desc Get Notes for each Paper
-// @route GET /Notes/:paper
-// @access Everyone
 const getNote = async (req, res) => {
   if (!req?.params?.noteId) {
     return res
@@ -39,20 +34,16 @@ const getNote = async (req, res) => {
   res.json(Note);
 };
 
-// @desc Add Notes
-// @route POST /Notes
-// @access Private
+
 const addNotes = asyncHandler(async (req, res) => {
   const { paper, title, body } = req.body;
 
-  // Confirm Data
   if (!paper || !title || !body) {
     return res
       .status(400)
       .json({ message: "Incomplete Request: Fields Missing" });
   }
 
-  // Check for Duplicates
   const duplicate = await Notes.findOne({
     paper: req.params.paper,
     title: req.params.title,
@@ -71,7 +62,6 @@ const addNotes = asyncHandler(async (req, res) => {
     body,
   };
 
-  // Create and Store New teacher
   const record = await Notes.create(NotesObj);
 
   if (record) {
@@ -83,18 +73,13 @@ const addNotes = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc Update Notes
-// @route PATCH /Notes
-// @access Private
 const updateNotes = asyncHandler(async (req, res) => {
   const { id, paper, title, body } = req.body;
 
-  // Confirm Data
   if (!paper || !title || !body) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
-  // Find Record
   const record = await Notes.findById(req.params.noteId).exec();
 
   if (!record) {
@@ -114,9 +99,6 @@ const updateNotes = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc Delete Teacher
-// @route DELETE /Teacher
-// @access Private
 const deleteNotes = asyncHandler(async (req, res) => {
   if (!req.params.noteId) {
     return res.status(400).json({ message: "Note ID required" });

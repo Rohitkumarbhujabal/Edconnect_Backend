@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 
-// Individual Paper in a Course
 const paperSchema = new mongoose.Schema({
   department: {
     type: String,

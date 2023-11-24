@@ -2,9 +2,6 @@ const { default: mongoose } = require("mongoose");
 const Attendance = require("./../models/Attendance");
 const asyncHandler = require("express-async-handler");
 
-// @desc Get Attendance
-// @route GET /attendance
-// @access Everyone
 const getAttendance = async (req, res) => {
   if (!req?.params?.paper || !req?.params?.date || !req?.params?.hour) {
     return res
@@ -26,9 +23,6 @@ const getAttendance = async (req, res) => {
   res.json(attendance);
 };
 
-// @desc Get Attendance Student
-// @route GET /attendance/student/date
-// @access Everyone
 const getAttendanceStudent = asyncHandler(async (req, res) => {
   if (!req?.params?.studentId || !req?.params?.date) {
     return res
@@ -88,20 +82,15 @@ const getAttendanceStudent = asyncHandler(async (req, res) => {
   res.json(attendance);
 });
 
-// @desc Add Attendance
-// @route POST /attendance
-// @access Private
 const addAttendance = asyncHandler(async (req, res) => {
   const { paper, date, hour, attendance } = req.body;
 
-  // Confirm Data
   if (!paper || !date || !hour || !attendance) {
     return res
       .status(400)
       .json({ message: "Incomplete Request: Body Missing" });
   }
 
-  // Check for Duplicates
   const duplicate = await Attendance.findOne({
     paper: req.params.paper,
     date: req.params.date,
@@ -123,7 +112,6 @@ const addAttendance = asyncHandler(async (req, res) => {
     attendance,
   };
 
-  // Create and Store New teacher
   const record = await Attendance.create(attendanceObj);
 
   if (record) {
@@ -135,37 +123,18 @@ const addAttendance = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc Update Attendance
-// @route PATCH /attendance
-// @access Private
 const updateAttendance = asyncHandler(async (req, res) => {
   const { id, paper, date, hour, attendance } = req.body;
 
-  // Confirm Data
   if (!id || !paper || !date || !hour || !attendance) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
-  // Find Record
   const record = await Attendance.findById(id).exec();
 
   if (!record) {
     return res.status(404).json({ message: "Attendance record doesn't exist" });
   }
-
-  //   // Check for duplicate
-  //   const duplicate = await Teacher.findOne({
-  //     paper: req.params.paper,
-  //     date: req.params.date,
-  //     hour: req.params.hour,
-  //   })
-  //     .lean()
-  //     .exec();
-
-  //   // Allow Updates to original
-  //   if (duplicate && duplicate?._id.toString() !== id) {
-  //     return res.status(409).json({ message: "Duplicate Username" });
-  //   }
 
   record.paper = paper;
   record.date = date;
@@ -182,9 +151,7 @@ const updateAttendance = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc Delete Teacher
-// @route DELETE /Teacher
-// @access Private
+
 const deleteAttendance = asyncHandler(async (req, res) => {
   if (!req?.params?.id) {
     return res.status(400).json({ message: "Attendance ID required" });

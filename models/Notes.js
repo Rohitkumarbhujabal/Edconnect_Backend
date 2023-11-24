@@ -1,7 +1,5 @@
 const mongoose = require("mongoose");
-// const AutoIncrement = require("mongoose-sequence")(mongoose);
 
-// Notes for Student
 const notesSchema = new mongoose.Schema(
   {
     paper: {
@@ -16,10 +14,6 @@ const notesSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    //   attachment: {
-    //     type: File ,
-    //     default: null,
-    //   },
   },
   {
     timestamps: true,
