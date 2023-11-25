@@ -1,11 +1,12 @@
 {
   "name": "4.4",
   "version": "1.0.0",
-  "description": "Kollege Backend",
+  "description": "edconnect Backend",
   "main": "server.js",
   "scripts": {
     "start": "node server",
-    "dev": "nodemon server"
+    "dev": "nodemon server",
+    "build": "npm i"
   },
   "keywords": [],
   "author": "",
