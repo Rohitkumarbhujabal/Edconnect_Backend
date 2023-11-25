@@ -1,5 +1,5 @@
 const allowedOrigins = [
-  "https://kollege.onrender.com",
+  "https://edconnect-mgmt.netlify.app",
   "http://localhost:3000",
 ];
 module.exports = allowedOrigins;
